@@ -6,3 +6,4 @@ tmp/
 .DS_Store
 log/*.log
 config/database.yml
+bin

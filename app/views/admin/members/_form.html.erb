@@ -15,12 +15,16 @@
     <%= f.input :diagnosis, :as => :select, :collection => Member::DIAGNOSES %>
     <%= f.input :placeDiagnosis, :label => "Place of Diagnosis" %>
     <%= f.input :dateDiagnosis, :label => "Date of Diagnosis", :as => :date, :order => [:month, :day, :year], :start_year => 1900 %>
-    <%= f.input :arv, :label => "ARV?", :as => :radio, :collection => [["Yes", true], ["No", false]] %>
+    <%= f.input :arv, :label => "Anti-Retrovirals?", :as => :radio, :collection => [["Yes", true], ["No", false]] %>
     <%= f.input :arvDate, :as => :date, :order => [:month, :day, :year], :start_year => 1900 %>
+    <%= f.input :methadone, :label => "Methadone?", :as => :radio, :collection => [["Yes", true], ["No", false]] %>
     <%= f.input :doctor %>
     <%= f.input :doctorPhone, :label => "Doctor Telephone" %>
     <%= f.input :dentist %>
     <%= f.input :dentistPhone, :label => "Dentist Telephone" %>
+    <%= f.input :emergency_contact_name, :label => "Emergency Contact" %>
+    <%= f.input :emergency_contact_phone, :label => "Emergency Contact Telephone" %>
+    <%= f.input :active, :label => "Active?", :as => :radio, :collection => [["Yes", true], ["No", false]] %>
   <% end %>
   <%= f.buttons :commit %>
 <% end %>

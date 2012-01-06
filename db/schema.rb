@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111116214939) do
+ActiveRecord::Schema.define(:version => 20120106211909) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -70,6 +70,10 @@ ActiveRecord::Schema.define(:version => 20111116214939) do
     t.string   "dentistPhone"
     t.datetime "dateDiagnosis"
     t.string   "placeDiagnosis"
+    t.boolean  "active"
+    t.boolean  "methadone"
+    t.string   "emergency_contact_name"
+    t.string   "emergency_contact_phone"
   end
 
 end
