@@ -25,39 +25,55 @@ ActiveAdmin.register Member do
     default_actions
   end
 
-  show do
-    panel "Member Details" do
-      attributes_table_for member do
-        row("Name") { member.firstName + " " + member.lastName }
-        row("Birthdate") { l(member.birthdate, :format => :long) if member.birthdate }
-        row("Gender") { member.gender }
-        row("Address") { member.address }
-        row("City") { member.city }
-        row("Province") { member.province }
-        row("Telephone") { member.telephone }
-        row("Carecard #") { member.carecard }
-        row("Social Insurance #") { member.sin }
-        row("Ethnicity") { member.ethnicity }
-        row("Diagnosis") { member.diagnosis }
-        row("Place of Diagnosis") { member.placeDiagnosis }
-        row("Date of Diagnosis") { l(member.dateDiagnosis, :format => :long) if member.dateDiagnosis }
-        row("Anti-Retrovirals") { member.arv ? 'Yes' : 'No' }
-        if member.arv
-          row("Anti-Retrovirals Since") { l(member.arvDate, :format => :long) if member.arvDate }
-        end
-        row("Methadone") { member.methadone ? 'Yes' : 'No' }
-        row("Doctor") { member.doctor }
-        row("Doctor Telephone") { member.doctorPhone }
-        row("Dentist") { member.dentist }
-        row("Dentist Telephone") { member.dentistPhone }
-        row("Emergency Contact") { member.emergency_contact_name }
-        row("Emergency Contact Telephone") { member.emergency_contact_phone }
-        row("Active") { member.active ? 'Yes' : 'No' }
-        row("Created") { l(member.created_at, :format => :long) }
-        row("Updated") { l(member.updated_at, :format => :long) }
+  show :title => "" do
+    panel "Goals" do
+      goals = member.goals.order("duedate asc").page(params[:goals_page]).per(5)
+      table_for goals do
+        column("Due Date") {|goal| pretty_format(goal.duedate.to_date)}
+        column("Complete") {|goal| status_tag(goal.state)}
+        column("Goal") {|goal| link_to(goal.body, admin_goal_path(goal))}
       end
+      paginate goals, :param_name => :goals_page
     end
-    active_admin_comments
+    panel "Progress Notes" do
+      notes = member.notes.order("updated_at desc").page(params[:notes_page]).per(5)
+      table_for notes do
+        column("Date") { |note| pretty_format(note.updated_at.to_date) }
+        column("Note") { |note| link_to(note.body, admin_note_path(note)) }
+      end
+      paginate notes, :param_name => :notes_page
+    end
+  end
+
+  sidebar "Member Details", :only => :show do
+    attributes_table_for member do
+      row("Name") { member.firstName + " " + member.lastName }
+      row("Birthdate") { l(member.birthdate, :format => :long) if member.birthdate }
+      row("Gender") { member.gender }
+      row("Address") { member.address }
+      row("City") { member.city }
+      row("Province") { member.province }
+      row("Telephone") { member.telephone }
+      row("Carecard #") { member.carecard }
+      row("Social Insurance #") { member.sin }
+      row("Ethnicity") { member.ethnicity }
+      row("Diagnosis") { member.diagnosis }
+      row("Place of Diagnosis") { member.placeDiagnosis }
+      row("Date of Diagnosis") { l(member.dateDiagnosis, :format => :long) if member.dateDiagnosis }
+      row("Anti-Retrovirals") { member.arv ? 'Yes' : 'No' }
+      if member.arv
+        row("Anti-Retrovirals Since") { l(member.arvDate, :format => :long) if member.arvDate }
+      end
+      row("Methadone") { member.methadone ? 'Yes' : 'No' }
+      row("Doctor") { member.doctor }
+      row("Doctor Telephone") { member.doctorPhone }
+      row("Emergency Contact") { member.emergency_contact_name }
+      row("Emergency Contact Telephone") { member.emergency_contact_phone }
+      row("Active") { member.active ? 'Yes' : 'No' }
+      row("Created") { l(member.created_at, :format => :long) }
+      row("Updated") { l(member.updated_at, :format => :long) }
+    end
+    #active_admin_comments
   end
 
   form :partial => "form"

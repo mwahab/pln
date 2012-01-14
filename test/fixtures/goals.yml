@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  commenter: MyString
+  body: MyText
+  duedate: 2012-01-13 01:01:40
+  complete: false
+  member: 
+
+two:
+  commenter: MyString
+  body: MyText
+  duedate: 2012-01-13 01:01:40
+  complete: false
+  member: 

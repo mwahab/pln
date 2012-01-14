@@ -17,7 +17,7 @@ namespace :db do
                  :password => "password",
                  :password_confirmation => "password")
 
-    99.times do |n|
+    10.times do |n|
       firstName  = Faker::Name.first_name
       lastName  = Faker::Name.last_name
       birthdate = DateTime.now - rand_int(7300, 21900)
@@ -34,13 +34,11 @@ namespace :db do
       arv = [true, false].sample
       arvDate = DateTime.now - rand_int(10, 7300)
       doctor = Faker::Name.name
-      dentist = Faker::Name.name
       doctorPhone = Faker::PhoneNumber.phone_number
-      dentistPhone = Faker::PhoneNumber.phone_number
       dateDiagnosis = DateTime.now - rand_int(10, 7300)
       placeDiagnosis = Faker::Address.city
 
-      Member.create!(:firstName => firstName,
+      member = Member.create!(:firstName => firstName,
                      :lastName => lastName,
                      :birthdate => birthdate,
                      :gender => gender,
@@ -57,10 +55,22 @@ namespace :db do
                      :arvDate => arvDate,
                      :doctor => doctor,
                      :doctorPhone => doctorPhone,
-                     :dentist => dentist,
-                     :dentistPhone => dentistPhone,
                      :dateDiagnosis => dateDiagnosis,
                      :placeDiagnosis => placeDiagnosis)
+
+      10.times do
+        userName = "admin@pln.com"
+        body = Faker::Lorem.paragraph
+        Note.create!(:commenter => userName, :body => body, :member => member)
+      end
+
+      5.times do
+        userName = "admin@pln.com"
+        body = Faker::Lorem.paragraph
+        complete = false
+        duedate = DateTime.now + rand_int(10, 7300)
+        Goal.create!(:commenter => userName, :body => body, :member => member, :complete => rand(2)==1, :duedate => duedate)
+      end
     end
   end
 end

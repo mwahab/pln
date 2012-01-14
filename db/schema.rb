@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120106211909) do
+ActiveRecord::Schema.define(:version => 20120113090140) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -46,6 +46,26 @@ ActiveRecord::Schema.define(:version => 20120106211909) do
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
+  create_table "comments", :force => true do |t|
+    t.string   "commenter"
+    t.text     "body"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goals", :force => true do |t|
+    t.string   "commenter"
+    t.text     "body"
+    t.datetime "duedate"
+    t.boolean  "complete"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "goals", ["member_id"], :name => "index_goals_on_member_id"
+
   create_table "members", :force => true do |t|
     t.string   "firstName"
     t.string   "lastName"
@@ -75,5 +95,15 @@ ActiveRecord::Schema.define(:version => 20120106211909) do
     t.string   "emergency_contact_name"
     t.string   "emergency_contact_phone"
   end
+
+  create_table "notes", :force => true do |t|
+    t.string   "commenter"
+    t.text     "body"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notes", ["member_id"], :name => "index_notes_on_member_id"
 
 end
