@@ -11,15 +11,16 @@ namespace :db do
   task :populate => :environment do
     Rake::Task['db:reset'].invoke
     AdminUser.create!(:email => "admin@pln.com",
-                 :password => "password",
-                 :password_confirmation => "password")
+                      :password => "password",
+                      :password_confirmation => "password")
     AdminUser.create!(:email => "admin2@pln.com",
-                 :password => "password",
-                 :password_confirmation => "password")
+                      :password => "password",
+                      :password_confirmation => "password")
 
-    10.times do |n|
+    10.times do 
       firstName  = Faker::Name.first_name
       lastName  = Faker::Name.last_name
+      name = firstName + " " + lastName
       birthdate = DateTime.now - rand_int(7300, 21900)
       gender = Member::GENDERS.sample
       address = Faker::Address.street_address
@@ -38,8 +39,9 @@ namespace :db do
       dateDiagnosis = DateTime.now - rand_int(10, 7300)
       placeDiagnosis = Faker::Address.city
 
-      member = Member.create!(:firstName => firstName,
+      Member.create!(:firstName => firstName,
                      :lastName => lastName,
+                     :name => name,
                      :birthdate => birthdate,
                      :gender => gender,
                      :address => address,
@@ -53,23 +55,28 @@ namespace :db do
                      :diagnosis => diagnosis,
                      :arv => arv,
                      :arvDate => arvDate,
+                     :methadone => rand(2) == 1,
+                     :active => rand(2) == 1,
                      :doctor => doctor,
                      :doctorPhone => doctorPhone,
                      :dateDiagnosis => dateDiagnosis,
                      :placeDiagnosis => placeDiagnosis)
 
-      10.times do
+    end
+
+    Member.all.each do |member|
+      20.times do
+        body = Faker::Lorem.sentence
         userName = "admin@pln.com"
-        body = Faker::Lorem.paragraph
-        Note.create!(:commenter => userName, :body => body, :member => member)
+        member.notes.create!(:commenter => userName, :body => body)
       end
 
-      5.times do
+      20.times do
+        body = Faker::Lorem.sentence(5)
+        complete = rand(2) == 1
+        duedate = complete ? DateTime.now + 14 : nil
         userName = "admin@pln.com"
-        body = Faker::Lorem.paragraph
-        complete = false
-        duedate = DateTime.now + rand_int(10, 7300)
-        Goal.create!(:commenter => userName, :body => body, :member => member, :complete => rand(2)==1, :duedate => duedate)
+        member.goals.create!(:commenter => userName, :body => body, :complete => complete, :duedate => duedate)
       end
     end
   end

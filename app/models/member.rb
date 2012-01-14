@@ -8,9 +8,9 @@ class Member < ActiveRecord::Base
   has_many :notes, :dependent => :destroy
   has_many :goals, :dependent => :destroy
 
-  attr_accessible :firstName, :lastName, :fullname, :birthdate, :gender, :address, :city, :province, :postalCode, :telephone, :carecard, :sin, :ethnicity, :diagnosis, :arv, :arvDate, :doctor, :dentist, :doctorPhone, :dentistPhone, :placeDiagnosis, :dateDiagnosis, :active, :methadone, :emergency_contact_name, :emergency_contact_phone
+  attr_accessible :firstName, :lastName, :name, :birthdate, :gender, :address, :city, :province, :postalCode, :telephone, :carecard, :sin, :ethnicity, :diagnosis, :arv, :arvDate, :doctor, :dentist, :doctorPhone, :dentistPhone, :placeDiagnosis, :dateDiagnosis, :active, :methadone, :emergency_contact_name, :emergency_contact_phone
 
-  validates :firstName, :lastName, :gender, :ethnicity, :diagnosis, :presence => true
+  validates :firstName, :lastName, :name, :gender, :ethnicity, :diagnosis, :presence => true
   validates :gender, :inclusion => { :in => GENDERS }
   validates :ethnicity, :inclusion => { :in => ETHNICITIES }
   validates :diagnosis, :inclusion => { :in => DIAGNOSES }

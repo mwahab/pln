@@ -4,7 +4,7 @@ class Goal < ActiveRecord::Base
   COMPLETE = "complete"
   INCOMPLETE = "incomplete"
 
-  attr_accessible :updated_at, :create_at
+  attr_accessible :body, :commenter, :complete, :duedate, :updated_at, :create_at
 
   def state
     self.complete ? COMPLETE : INCOMPLETE

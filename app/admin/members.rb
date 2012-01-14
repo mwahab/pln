@@ -8,8 +8,7 @@ ActiveAdmin.register Member do
   filter :active, :as => :select, :collection => [["Yes", true], ["No", false]]
 
   index do
-    column "Family name", :lastName
-    column "Given name", :firstName
+    column :name
     column :birthdate, :sortable => :birthdate do |member|
       member.birthdate.to_date.to_s
     end
@@ -27,14 +26,15 @@ ActiveAdmin.register Member do
 
   show :title => "" do
     panel "Goals" do
-      goals = member.goals.order("duedate asc").page(params[:goals_page]).per(5)
+      goals = member.goals.page(params[:goals_page]).per(5)
       table_for goals do
-        column("Due Date") {|goal| pretty_format(goal.duedate.to_date)}
+        column("Due Date") {|goal| goal.duedate ? pretty_format(goal.duedate.to_date) : '-'}
         column("Complete") {|goal| status_tag(goal.state)}
         column("Goal") {|goal| link_to(goal.body, admin_goal_path(goal))}
       end
       paginate goals, :param_name => :goals_page
     end
+
     panel "Progress Notes" do
       notes = member.notes.order("updated_at desc").page(params[:notes_page]).per(5)
       table_for notes do
@@ -47,7 +47,7 @@ ActiveAdmin.register Member do
 
   sidebar "Member Details", :only => :show do
     attributes_table_for member do
-      row("Name") { member.firstName + " " + member.lastName }
+      row("Name") { member.name }
       row("Birthdate") { l(member.birthdate, :format => :long) if member.birthdate }
       row("Gender") { member.gender }
       row("Address") { member.address }
@@ -73,7 +73,6 @@ ActiveAdmin.register Member do
       row("Created") { l(member.created_at, :format => :long) }
       row("Updated") { l(member.updated_at, :format => :long) }
     end
-    #active_admin_comments
   end
 
   form :partial => "form"
