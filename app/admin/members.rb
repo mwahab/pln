@@ -24,22 +24,33 @@ ActiveAdmin.register Member do
     default_actions
   end
 
-  show :title => "" do
-    panel "Goals" do
-      goals = member.goals.page(params[:goals_page]).per(5)
-      table_for goals do
-        column("Due Date") {|goal| goal.duedate ? pretty_format(goal.duedate.to_date) : '-'}
-        column("Complete") {|goal| status_tag(goal.state)}
-        column("Goal") {|goal| link_to(goal.body, admin_goal_path(goal))}
+  show :title => :name do
+    member_completed_goals = member.goals.completed.order("duedate asc").page(params[:goals_completed_page]).per(10)
+    member_incomplete_goals = member.goals.incomplete.order("duedate asc").page(params[:goals_incomplete_page]).per(10)
+
+    panel "Completed Goals" do
+      table_for member_completed_goals do
+        column("Due Date") {|goal| goal.duedate ? pretty_format(goal.duedate.to_date) : 'N/A'}
+        column("Status") {|goal| status_tag(goal.state)}
+        column("Goal") {|goal| link_to(snippet(goal.body), admin_goal_path(goal))}
       end
-      paginate goals, :param_name => :goals_page
-    end
+      paginate member_completed_goals, :param_name => :goals_completed_page
+    end unless member.goals.completed.count == 0
+
+    panel "Incomplete Goals" do
+      table_for member_incomplete_goals do
+        column("Due Date") {|goal| goal.duedate ? pretty_format(goal.duedate.to_date) : 'N/A'}
+        column("Status") {|goal| status_tag(goal.state)}
+        column("Goal") {|goal| link_to(snippet(goal.body), admin_goal_path(goal))}
+      end
+      paginate member_incomplete_goals, :param_name => :goals_incomplete_page
+    end unless member.goals.incomplete.count == 0
 
     panel "Progress Notes" do
-      notes = member.notes.order("updated_at desc").page(params[:notes_page]).per(5)
+      notes = member.notes.order("updated_at desc").page(params[:notes_page]).per(10)
       table_for notes do
         column("Date") { |note| pretty_format(note.updated_at.to_date) }
-        column("Note") { |note| link_to(note.body, admin_note_path(note)) }
+        column("Note") { |note| link_to(snippet(note.body), admin_note_path(note)) }
       end
       paginate notes, :param_name => :notes_page
     end
@@ -48,7 +59,7 @@ ActiveAdmin.register Member do
   sidebar "Member Details", :only => :show do
     attributes_table_for member do
       row("Name") { member.name }
-      row("Birthdate") { l(member.birthdate, :format => :long) if member.birthdate }
+      row("Birthdate") { pretty_format(member.birthdate.to_date) if member.birthdate }
       row("Gender") { member.gender }
       row("Address") { member.address }
       row("City") { member.city }
@@ -59,10 +70,10 @@ ActiveAdmin.register Member do
       row("Ethnicity") { member.ethnicity }
       row("Diagnosis") { member.diagnosis }
       row("Place of Diagnosis") { member.placeDiagnosis }
-      row("Date of Diagnosis") { l(member.dateDiagnosis, :format => :long) if member.dateDiagnosis }
+      row("Date of Diagnosis") { pretty_format(member.dateDiagnosis.to_date) if member.dateDiagnosis }
       row("Anti-Retrovirals") { member.arv ? 'Yes' : 'No' }
       if member.arv
-        row("Anti-Retrovirals Since") { l(member.arvDate, :format => :long) if member.arvDate }
+        row("Anti-Retrovirals Since") { pretty_format(member.arvDate.to_date) if member.arvDate }
       end
       row("Methadone") { member.methadone ? 'Yes' : 'No' }
       row("Doctor") { member.doctor }
@@ -70,8 +81,8 @@ ActiveAdmin.register Member do
       row("Emergency Contact") { member.emergency_contact_name }
       row("Emergency Contact Telephone") { member.emergency_contact_phone }
       row("Active") { member.active ? 'Yes' : 'No' }
-      row("Created") { l(member.created_at, :format => :long) }
-      row("Updated") { l(member.updated_at, :format => :long) }
+      row("Created") { pretty_format(member.created_at) }
+      row("Updated") { pretty_format(member.updated_at) }
     end
   end
 

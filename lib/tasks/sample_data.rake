@@ -66,15 +66,15 @@ namespace :db do
 
     Member.all.each do |member|
       20.times do
-        body = Faker::Lorem.sentence
+        body = Faker::Lorem.paragraph
         userName = "admin@pln.com"
         member.notes.create!(:commenter => userName, :body => body)
       end
 
       20.times do
-        body = Faker::Lorem.sentence(5)
+        body = Faker::Lorem.paragraph
         complete = rand(2) == 1
-        duedate = complete ? DateTime.now + 14 : nil
+        duedate = rand(2) == 1 ? DateTime.now + rand_int(10, 7300) : nil
         userName = "admin@pln.com"
         member.goals.create!(:commenter => userName, :body => body, :complete => complete, :duedate => duedate)
       end

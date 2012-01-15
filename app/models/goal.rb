@@ -1,6 +1,9 @@
 class Goal < ActiveRecord::Base
   belongs_to :member
 
+  scope :incomplete, lambda { where("complete = ?", false) }
+  scope :completed, lambda { where("complete = ?", true) }
+
   COMPLETE = "complete"
   INCOMPLETE = "incomplete"
 
