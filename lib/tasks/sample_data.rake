@@ -10,7 +10,7 @@ namespace :db do
   desc "Fill database with sample data"
   task :populate => :environment do
     Rake::Task['db:reset'].invoke
-    AdminUser.create!(:email => "admin@pln.com",
+    admin_user = AdminUser.create!(:email => "admin@pln.com",
                       :password => "password",
                       :password_confirmation => "password")
     AdminUser.create!(:email => "admin2@pln.com",
@@ -36,6 +36,8 @@ namespace :db do
       arvDate = DateTime.now - rand_int(10, 7300)
       doctor = Faker::Name.name
       doctorPhone = Faker::PhoneNumber.phone_number
+      emergency_contact_name = Faker::Name.name
+      emergency_contact_phone = Faker::PhoneNumber.phone_number
       dateDiagnosis = DateTime.now - rand_int(10, 7300)
       placeDiagnosis = Faker::Address.city
 
@@ -59,6 +61,8 @@ namespace :db do
                      :active => rand(2) == 1,
                      :doctor => doctor,
                      :doctorPhone => doctorPhone,
+                     :emergency_contact_name => emergency_contact_name,
+                     :emergency_contact_phone => emergency_contact_phone,
                      :dateDiagnosis => dateDiagnosis,
                      :placeDiagnosis => placeDiagnosis)
 
@@ -66,17 +70,15 @@ namespace :db do
 
     Member.all.each do |member|
       20.times do
-        body = Faker::Lorem.paragraph
-        userName = "admin@pln.com"
-        member.notes.create!(:commenter => userName, :body => body)
+        body = Faker::Lorem.paragraphs
+        member.notes.create!(:admin_user_id => admin_user.id, :body => body)
       end
 
       20.times do
         body = Faker::Lorem.paragraph
         complete = rand(2) == 1
         duedate = rand(2) == 1 ? DateTime.now + rand_int(10, 7300) : nil
-        userName = "admin@pln.com"
-        member.goals.create!(:commenter => userName, :body => body, :complete => complete, :duedate => duedate)
+        member.goals.create!(:admin_user_id => admin_user.id, :body => body, :complete => complete, :duedate => duedate)
       end
     end
   end

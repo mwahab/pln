@@ -8,14 +8,14 @@ class Member < ActiveRecord::Base
   has_many :notes, :dependent => :destroy
   has_many :goals, :dependent => :destroy
 
-  attr_accessible :firstName, :lastName, :name, :birthdate, :gender, :address, :city, :province, :postalCode, :telephone, :carecard, :sin, :ethnicity, :diagnosis, :arv, :arvDate, :doctor, :dentist, :doctorPhone, :dentistPhone, :placeDiagnosis, :dateDiagnosis, :active, :methadone, :emergency_contact_name, :emergency_contact_phone
+  attr_accessible :firstName, :lastName, :name, :birthdate, :gender, :address, :city, :province, :postalCode, :telephone, :carecard, :sin, :ethnicity, :diagnosis, :arv, :arvDate, :doctor, :doctorPhone, :placeDiagnosis, :dateDiagnosis, :active, :methadone, :emergency_contact_name, :emergency_contact_phone
 
   validates :firstName, :lastName, :name, :gender, :ethnicity, :diagnosis, :presence => true
   validates :gender, :inclusion => { :in => GENDERS }
   validates :ethnicity, :inclusion => { :in => ETHNICITIES }
   validates :diagnosis, :inclusion => { :in => DIAGNOSES }
 
-  def incomplete?
-    self.attributes.values.any? { |v| v.nil? }
-  end
+  scope :incomplete_files, lambda {
+    where("name IS NULL OR gender IS NULL OR ethnicity IS NULL OR diagnosis IS NULL OR sin IS NULL OR address IS NULL OR birthdate IS NULL OR province IS NULL OR postalCode IS NULL OR telephone IS NULL OR carecard IS NULL OR doctor IS NULL OR doctorPhone IS NULL") 
+  }
 end

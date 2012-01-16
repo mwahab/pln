@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120114083751) do
+ActiveRecord::Schema.define(:version => 20120116184757) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -47,15 +47,16 @@ ActiveRecord::Schema.define(:version => 20120114083751) do
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
   create_table "goals", :force => true do |t|
-    t.string   "commenter"
     t.text     "body"
     t.datetime "duedate"
     t.boolean  "complete"
     t.integer  "member_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "admin_user_id"
   end
 
+  add_index "goals", ["admin_user_id"], :name => "index_goals_on_admin_user_id"
   add_index "goals", ["member_id"], :name => "index_goals_on_member_id"
 
   create_table "members", :force => true do |t|
@@ -90,13 +91,14 @@ ActiveRecord::Schema.define(:version => 20120114083751) do
   end
 
   create_table "notes", :force => true do |t|
-    t.string   "commenter"
     t.text     "body"
     t.integer  "member_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "admin_user_id"
   end
 
+  add_index "notes", ["admin_user_id"], :name => "index_notes_on_admin_user_id"
   add_index "notes", ["member_id"], :name => "index_notes_on_member_id"
 
 end

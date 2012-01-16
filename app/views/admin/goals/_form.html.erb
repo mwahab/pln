@@ -1,0 +1,10 @@
+<%= semantic_form_for [:admin, @goal] do |f| %>
+  <%= f.inputs "Goal Details" do %>
+    <%= f.input :member, :include_blank => false %>
+    <%= f.input :body %>
+    <%= f.input :admin_user, :label => "Creator", :include_blank => false %>
+    <%= f.input :duedate, :label => "Due Date (blank for N/A)", :as => :date, :order => [:month, :day, :year], :start_year => 1950%>
+    <%= f.input :complete, :as => :select, :collection => [["False", false], ["True", true]], :include_blank => false %>
+  <% end %>
+  <%= f.buttons :commit %>
+<% end %>

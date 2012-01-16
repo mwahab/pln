@@ -25,6 +25,7 @@ ActiveAdmin.register Member do
   end
 
   show :title => :name do
+
     member_completed_goals = member.goals.completed.order("duedate asc").page(params[:goals_completed_page]).per(10)
     member_incomplete_goals = member.goals.incomplete.order("duedate asc").page(params[:goals_incomplete_page]).per(10)
 
