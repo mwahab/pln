@@ -21,7 +21,7 @@ ActiveAdmin.register Goal do
       row("Status") { status_tag(goal.state) }
       row("Due Date") { goal.duedate ? pretty_format(goal.duedate) : 'N/A' }
       row("Member") { link_to(goal.member.name, admin_member_path(goal.member)) }
-      row("Creator") { goal.admin_user }
+      row("Updated By") { goal.admin_user }
       row("Goal") { goal.body }
       row("Created") { pretty_format(goal.created_at) }
       row("Updated") { pretty_format(goal.updated_at) }

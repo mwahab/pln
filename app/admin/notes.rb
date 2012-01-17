@@ -14,7 +14,7 @@ ActiveAdmin.register Note do
     attributes_table_for note do
       row("Date") { pretty_format(note.updated_at.to_date) }
       row("Member") { link_to(note.member.name, admin_member_path(note.member)) }
-      row("Creator") { note.admin_user }
+      row("Updated By") { note.admin_user }
       row("Note") { note.body }
       row("Created") { pretty_format(note.created_at) }
       row("Updated") { pretty_format(note.updated_at) }

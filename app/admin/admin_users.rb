@@ -5,7 +5,9 @@ ActiveAdmin.register AdminUser do
 
   index do
     column :email
-    column :created_at
+    column :created_at, :sortable => :created_at do |user|
+      pretty_format(user.created_at.to_date)
+    end
     column :current_sign_in_at
     column :last_sign_in_at
     column :sign_in_count
@@ -16,8 +18,8 @@ ActiveAdmin.register AdminUser do
     panel "Admin User Details" do
       attributes_table_for admin_user do
         row("Email") { admin_user.email }
-        row("Created At") { l(admin_user.created_at, :format => :long) }
-        row("Last Signed In At") { l(admin_user.last_sign_in_at, :format => :long) if admin_user.last_sign_in_at }
+        row("Created At") { pretty_format(admin_user.created_at.to_date) }
+        row("Last Signed In At") { pretty_format(admin_user.last_sign_in_at.to_date) if admin_user.last_sign_in_at }
         row("Sign In Count") { admin_user.sign_in_count || 0 }
       end
     end
