@@ -24,6 +24,10 @@ ActiveAdmin.register Member do
     default_actions
   end
 
+  action_item(:only => :show) do
+    link_to "Add Goal", new_resource_path(member.goal)
+  end
+
   show :title => :name do
 
     member_completed_goals = member.goals.completed.order("duedate asc").page(params[:goals_completed_page]).per(10)
