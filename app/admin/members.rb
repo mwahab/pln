@@ -10,7 +10,7 @@ ActiveAdmin.register Member do
   index do
     column :name
     column :birthdate, :sortable => :birthdate do |member|
-      member.birthdate.to_date.to_s
+      member.birthdate.to_date.to_s if member.birthdate
     end
     column :gender
     column :city
@@ -24,9 +24,9 @@ ActiveAdmin.register Member do
     default_actions
   end
 
-  action_item(:only => :show) do
-    link_to "Add Goal", new_resource_path(member.goal)
-  end
+  # action_item(:only => :show) do
+  #   link_to "Add Goal", new_resource_path(member.goal)
+  # end
 
   show :title => :name do
 

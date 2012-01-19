@@ -15,7 +15,8 @@ class Member < ActiveRecord::Base
   validates :ethnicity, :inclusion => { :in => ETHNICITIES }
   validates :diagnosis, :inclusion => { :in => DIAGNOSES }
 
-  scope :incomplete_files, lambda {
-    where("name IS NULL OR gender IS NULL OR ethnicity IS NULL OR diagnosis IS NULL OR sin IS NULL OR address IS NULL OR birthdate IS NULL OR province IS NULL OR postalCode IS NULL OR telephone IS NULL OR carecard IS NULL OR doctor IS NULL OR doctorPhone IS NULL") 
-  }
+  def self.incomplete
+    Member.all.select { |m|
+      m.name.blank? || m.gender.blank? || m.ethnicity.blank? || m.diagnosis.blank? || m.sin.blank? || m.address.blank? || m.city.blank? || m.birthdate == nil || m.province.blank? || m.postalCode.blank? || m.telephone.blank? || m.carecard.blank? || m.doctor.blank? || m.doctorPhone.blank? || m.emergency_contact_name.blank? || m.emergency_contact_phone.blank?}
+  end
 end

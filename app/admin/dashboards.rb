@@ -36,12 +36,13 @@ ActiveAdmin::Dashboards.build do
   # Will render the "Recent Users" then the "Recent Posts" sections on the dashboard.
 
   section "Near Due Incomplete Goals", :priority => 1 do
-    table_for Goal.near_due.incomplete.order("duedate asc").limit(10).each do
+    near_goals = Goal.near_due.incomplete.order("duedate asc").limit(10)
+    table_for near_goals.each do
       column("Due Date") { |goal| pretty_format(goal.duedate.to_date) }
       column("Member") { |goal| link_to(goal.member.name, admin_member_path(goal.member))}
       column("Goal") { |goal| link_to(snippet(goal.body), admin_goal_path(goal)) }
-    end
-  end unless Goal.near_due.count == 0
+    end unless near_goals.empty?
+  end
 
   section "Recent Progress Notes", :priority => 2 do
     table_for Note.order('updated_at desc').limit(10).each do
@@ -49,14 +50,15 @@ ActiveAdmin::Dashboards.build do
       column("Member") { |note| link_to(note.member.name, admin_member_path(note.member))}
       column("Note") { |note| link_to(snippet(note.body), admin_note_path(note)) }
     end
-  end unless Note.count == 0
+  end
 
   section "Incomplete Profiles", :priority => 3 do
-    table_for Member.incomplete_files.each do |member|
+    incomplete_members = Member.incomplete
+    table_for incomplete_members.each do |member|
       column("Last Updated") { |member| pretty_format(member.updated_at.to_date) }
       column("Name") { |member| link_to(member.name, admin_member_path(member)) }
-    end
-  end unless Member.incomplete_files.count == 0
+    end unless incomplete_members.empty?
+  end
 
   # section "Recently Diagnosed Members", :priority => 2 do
   #   table_for Member.order('dateDiagnosis desc').limit(10).each do |member|
@@ -64,5 +66,4 @@ ActiveAdmin::Dashboards.build do
   #     column("Name") { |member| link_to(member.firstName + " " + member.lastName, admin_member_path(member)) }
   #   end
   # end
-
 end
