@@ -15,7 +15,7 @@
     <%= f.input :placeDiagnosis, :label => "Place of Diagnosis" %>
     <%= f.input :dateDiagnosis, :label => "Date of Diagnosis", :as => :date, :order => [:month, :day, :year], :start_year => 1900 %>
     <%= f.input :arv, :label => "Anti-Retrovirals?", :as => :select, :collection => [["False", false], ["True", true]], :include_blank => false %>
-    <%= f.input :arvDate, :as => :date, :order => [:month, :day, :year], :start_year => 1900 %>
+    <%= f.input :arvDate, :label => "ARV Date", :as => :date, :order => [:month, :day, :year], :start_year => 1900 %>
     <%= f.input :methadone, :label => "Methadone?", :as => :select, :collection => [["False", false], ["True", true]], :include_blank => false %>
     <%= f.input :doctor %>
     <%= f.input :doctorPhone, :label => "Doctor Telephone" %>
