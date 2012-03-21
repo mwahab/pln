@@ -19,7 +19,7 @@ ActiveAdmin.register Goal do
   show :title => "" do
     attributes_table_for goal do
       row("Status") { status_tag(goal.state) }
-      row("Due Date") { goal.duedate ? pretty_format(goal.duedate) : 'N/A' }
+      row("Due Date") { goal.duedate ? pretty_format(goal.duedate.to_date) : 'N/A' }
       row("Member") { link_to(goal.member.name, admin_member_path(goal.member)) }
       row("Updated By") { goal.admin_user }
       row("Goal") { goal.body }
