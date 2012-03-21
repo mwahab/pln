@@ -8,11 +8,11 @@ ActiveAdmin.register Appointment do
 
   index do
     column("Status", :sortable => :complete) {|appointment| status_tag(appointment.state)}    
+    column "Member", :member, :sortable => false
     column "Date", :sortable => :duedate do |appointment|
       appointment.duedate ? pretty_format(appointment.duedate) : 'N/A'
     end
-    # add column for location
-    column "Member", :member, :sortable => false
+    column "Location", :location, :sortable => false
     column("Description", :body, :sortable => false) {|appointment| snippet(appointment.body)}
     default_actions
   end
@@ -22,7 +22,7 @@ ActiveAdmin.register Appointment do
       row("Member") { link_to(appointment.member.name, admin_member_path(appointment.member)) }      
       row("Status") { status_tag(appointment.state) }
       row("Date") { appointment.duedate ? pretty_format(appointment.duedate) : 'N/A' }
-      row("Location") { "**** Add location to appointment model ****" }      
+      row("Location") { appointment.location }      
       row("Description") { appointment.body }
       row("Updated By") { appointment.admin_user }      
       row("Created") { pretty_format(appointment.created_at) }

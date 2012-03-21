@@ -9,9 +9,9 @@ class Appointment < ActiveRecord::Base
   COMPLETE = "complete"
   INCOMPLETE = "incomplete"
 
-  attr_accessible :body, :member, :member_id, :admin_user, :admin_user_id, :complete, :duedate, :updated_at, :create_at
+  attr_accessible :body, :member, :member_id, :admin_user, :admin_user_id, :complete, :duedate, :location, :updated_at, :create_at
 
-  validates :body, :member, :presence => true
+  validates :body, :member, :location, :duedate, :presence => true
 
   def state
     self.complete ? COMPLETE : INCOMPLETE

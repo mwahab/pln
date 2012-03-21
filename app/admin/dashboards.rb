@@ -35,7 +35,17 @@ ActiveAdmin::Dashboards.build do
   #
   # Will render the "Recent Users" then the "Recent Posts" sections on the dashboard.
 
-  section "Near Due Incomplete Goals", :priority => 1 do
+  section "Upcoming Appointments", :priority => 1 do
+    near_appointments = Appointment.near_due.incomplete.order("duedate asc").limit(10)
+    table_for near_appointments.each do
+      column("Date") { |appointment| pretty_format(appointment.duedate) }
+      column("Location") { |appointment| appointment.location }
+      column("Member") { |appointment| link_to(appointment.member.name, admin_member_path(appointment.member))}
+      column("Description") { |appointment| link_to(snippet(appointment.body), admin_appointment_path(appointment)) }
+    end unless near_appointments.empty?
+  end
+
+  section "Near Due Incomplete Goals", :priority => 2 do
     near_goals = Goal.near_due.incomplete.order("duedate asc").limit(10)
     table_for near_goals.each do
       column("Due Date") { |goal| pretty_format(goal.duedate.to_date) }
@@ -44,7 +54,7 @@ ActiveAdmin::Dashboards.build do
     end unless near_goals.empty?
   end
 
-  section "Recent Progress Notes", :priority => 2 do
+  section "Recent Progress Notes", :priority => 3 do
     table_for Note.order('updated_at desc').limit(10).each do
       column("Date") { |note| pretty_format(note.updated_at.to_date) }
       column("Member") { |note| link_to(note.member.name, admin_member_path(note.member))}
@@ -52,7 +62,7 @@ ActiveAdmin::Dashboards.build do
     end
   end
 
-  section "Incomplete Profiles", :priority => 3 do
+  section "Incomplete Profiles", :priority => 4 do
     incomplete_members = Member.incomplete
     table_for incomplete_members.each do |member|
       column("Last Updated") { |member| pretty_format(member.updated_at.to_date) }
