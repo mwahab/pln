@@ -3,11 +3,13 @@ ActiveAdmin.register Appointment do
   # filter :complete, :as => :select, :collection => [["Yes", true], ["No", false]]
 
   scope :all, :default => true
-  scope :completed
-  scope :incomplete
+  scope :future
+  scope :past
 
   index do
-    column("Status", :sortable => :complete) {|appointment| status_tag(appointment.state)}    
+    column("Status", :sortable => :duedate) do |appointment| 
+      appointment.duedate < Time.now ? status_tag(appointment.state) : status_tag(appointment.state, :ok)
+    end
     column "Member", :member, :sortable => false
     column "Date", :sortable => :duedate do |appointment|
       appointment.duedate ? pretty_format(appointment.duedate) : 'N/A'
@@ -20,7 +22,7 @@ ActiveAdmin.register Appointment do
   show :title => "" do
     attributes_table_for appointment do
       row("Member") { link_to(appointment.member.name, admin_member_path(appointment.member)) }      
-      row("Status") { status_tag(appointment.state) }
+      #row("Status") { status_tag(appointment.state) }
       row("Date") { appointment.duedate ? pretty_format(appointment.duedate) : 'N/A' }
       row("Location") { appointment.location }      
       row("Description") { appointment.body }

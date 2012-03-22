@@ -36,7 +36,7 @@ ActiveAdmin::Dashboards.build do
   # Will render the "Recent Users" then the "Recent Posts" sections on the dashboard.
 
   section "Upcoming Appointments", :priority => 1 do
-    near_appointments = Appointment.near_due.incomplete.order("duedate asc").limit(10)
+    near_appointments = Appointment.near_due.order("duedate asc").limit(10)
     table_for near_appointments.each do
       column("Date") { |appointment| pretty_format(appointment.duedate) }
       column("Location") { |appointment| appointment.location }

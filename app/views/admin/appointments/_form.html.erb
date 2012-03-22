@@ -2,9 +2,8 @@
   <%= f.inputs "Appointment Details" do %>
     <%= f.input :member, :include_blank => false %>
     <%= f.input :admin_user_id, :as => :hidden, :value => current_admin_user.id %>
-    <%= f.input :duedate, :label => "Date", :as => :datetime, :order => [:month, :day, :year], :start_year => 2010, :minute_step => 5, :ampm => true, :prompt => {:day => 'Day', :month => 'Month', :year => 'Year', :hour => 'Hour', :minute => 'Minute'} %>
+    <%= f.input :duedate, :label => "Date/Time", :as => :datetime, :order => [:month, :day, :year], :start_year => 2010, :minute_step => 5, :ampm => true, :prompt => {:day => 'Day', :month => 'Month', :year => 'Year', :hour => 'Hour', :minute => 'Minute'} %>
     <%= f.input :location, :label => "Location" %>
-    <%= f.input :complete, :as => :select, :collection => [["False", false], ["True", true]], :include_blank => false %>
     <%= f.input :body, :label => "Description" %>
   <% end %>
   <%= f.buttons :commit %>
