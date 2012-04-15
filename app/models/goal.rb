@@ -4,7 +4,7 @@ class Goal < ActiveRecord::Base
 
   scope :incomplete, lambda { where("complete = ?", false) }
   scope :completed, lambda { where("complete = ?", true) }
-  scope :near_due, where(:duedate => Time.now..Time.now.next_month)
+  scope :near_due, where(:duedate => Date.yesterday..Date.today.next_month)
 
   COMPLETE = "complete"
   INCOMPLETE = "incomplete"

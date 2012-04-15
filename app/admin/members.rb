@@ -1,4 +1,5 @@
 ActiveAdmin.register Member do
+  filter :name
   filter :gender, :as => :select, :collection => proc { Member::GENDERS } 
   filter :province, :as => :select, :collection => proc { Member::PROVINCES }
   filter :diagnosis, :as => :select, :collection => proc { Member::DIAGNOSES }

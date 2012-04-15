@@ -2,7 +2,7 @@ class Appointment < ActiveRecord::Base
   belongs_to :member
   belongs_to :admin_user
 
-  scope :near_due, where(:duedate => Time.now..Time.now.next_month)
+  scope :near_due, where(:duedate => Date.yesterday..Date.today.next_month)
   scope :future, lambda { where("duedate >= ?", Time.now) }
   scope :past, lambda { where("duedate < ?", Time.now) }
 
